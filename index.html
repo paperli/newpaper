@@ -70,9 +70,53 @@
 			hour = now.getHours()%12;
 			minute = now.getMinutes();
 			angle = 2*Math.PI*(hour*60+minute)/(12*60);
+			minute_angle = 2*Math.PI*minute/60;
 			//console.log(180*angle/Math.PI);
 			
 			canvas.width = canvas.width;
+			
+			//---- draw minute ring ----
+			ctx.save();
+			ctx.translate(canvas.width/2,canvas.height/2);
+			ctx.rotate(minute_angle);
+			ctx.scale(1.02,1.02);
+			ctx.translate(-canvas.width/2,-canvas.height/2);
+			ctx.lineWidth=1;
+			ctx.strokeStyle="rgba(80,80,80,0.1)";
+			ctx.fillStyle="rgba(128,128,128,0.1)";
+			ctx.shadowColor = "rgba(0,0,0,0.3)";
+			ctx.shadowBlur = 10;
+			ctx.shadowOffsetY = 0;
+			ctx.beginPath();
+			
+			archive = points[0][0].y;	
+			
+			zap_temp += (zap - zap_temp)*0.01;
+			points[0][0].y += zap_temp;
+			points[0][1].y += zap_temp;
+			points[points.length-1][2].y += zap_temp;
+			points[points.length-1][3].y += zap_temp;
+			
+			ctx.moveTo(points[0][0].x,points[0][0].y);
+			for(a = 0;a<points.length;a++){
+				
+				ctx.bezierCurveTo(points[a][1].x,points[a][1].y,points[a][2].x,points[a][2].y,points[a][3].x,points[a][3].y);
+			
+			}
+			ctx.closePath();
+			ctx.stroke();
+			//ctx.globalAlpha = 0.5;
+			ctx.fill();			
+			
+			//console.log(angle);
+			points[0][0].y = points[0][1].y = points[points.length-1][3].y = points[points.length-1][2].y = archive;
+			
+			//reset
+			ctx.restore();
+			//--- end of minute ring ---
+			
+			
+			//--- draw hour ring ---
 			ctx.translate(canvas.width/2,canvas.height/2);
 			ctx.rotate(angle);
 			ctx.translate(-canvas.width/2,-canvas.height/2);
@@ -85,10 +129,10 @@
 			}*/
 			init = false;
 			ctx.lineWidth=1;
-			ctx.strokeStyle="#c3c3c3";
-			ctx.fillStyle="rgba(200,200,200,0.3)";
+			ctx.strokeStyle="rgba(80,80,80,0.2)";
+			ctx.fillStyle="rgba(128,128,128,0.2)";
 			ctx.shadowColor = "rgba(0,0,0,0.3)";
-			ctx.shadowBlur = 10;
+			ctx.shadowBlur = 0;
 			ctx.shadowOffsetY = 0;
 			ctx.beginPath();
 			
@@ -103,7 +147,7 @@
 			points[points.length-1][3].y += zap_temp;
 			
 			ctx.moveTo(points[0][0].x,points[0][0].y);
-			for(var a = 0;a<points.length;a++){
+			for(a = 0;a<points.length;a++){
 				
 				ctx.bezierCurveTo(points[a][1].x,points[a][1].y,points[a][2].x,points[a][2].y,points[a][3].x,points[a][3].y);
 			
@@ -119,7 +163,7 @@
 			points[0][0].y = points[0][1].y = points[points.length-1][3].y = points[points.length-1][2].y = archive;
 			//console.log(points[0][0]);
 			
-			//draw clock decoration
+			//--- draw clock decoration ---
 			ctx.translate(canvas.width/2,canvas.height/2);
 			ctx.rotate(-angle);
 			ctx.translate(-canvas.width/2,-canvas.height/2);
