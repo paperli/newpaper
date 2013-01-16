@@ -30,6 +30,10 @@
 	}
 	
 	$(document).ready(function(){
+        $(window).resize(function(){
+            document.getElementById("myCanvas").style.height = document.getElementById("myCanvas").style.width = $(window).height()>$(window).width()?($(window).width()-6):($(window).height()-6) + "px";
+        document.getElementById("main").style.width = document.getElementById("myCanvas").style.width;
+        });
 		canvasApp();
 	});
 	
@@ -39,6 +43,8 @@
 		}
 		
 		canvas = document.getElementById("myCanvas");
+        canvas.style.height = canvas.style.width = $(window).height()>$(window).width()?($(window).width()-6):($(window).height()-6) + "px";
+        document.getElementById("main").style.width = canvas.style.width;
 		ctx  = canvas.getContext("2d");
 		canvas_center = {x:canvas.width/2,y:canvas.height/2};
 		var radius = 200;
